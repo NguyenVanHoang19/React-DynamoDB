@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from "axios";
-
+import '../pages/sinhvien.css'
+const ip_Public = "http://localhost:3001";
 let student_data = {
             id:1,
             ma_sinhvien: "",
@@ -29,8 +30,8 @@ class ThemSinhVien extends React.Component{
     };
     componentWillMount() {
 		this.getAllStudent();
-	}
-     getAllStudent = (evt) =>{
+	};
+    getAllStudent = (evt) =>{
         const config = {
             headers:{
                 "Content-Type" : "application/json",
@@ -38,7 +39,7 @@ class ThemSinhVien extends React.Component{
         };
         var headers = new Headers();
 		headers.append("Content-Type", "application/json");
-        fetch(`http://localhost:3001/api/getALLSinhVien`,{
+        fetch(ip_Public+`/api/getALLSinhVien`,{
             method:"GET",
             headers:headers,
         })
@@ -60,7 +61,7 @@ class ThemSinhVien extends React.Component{
         };
         const body = JSON.stringify({id,ma_sinhvien,ten_sinhvien,ngay_sinh,avatar});
         axios
-            .post(`http://localhost:3001/api/addSinhVien`,body,config)
+            .post(ip_Public+`/api/addSinhVien`,body,config)
             .then((res) =>{
                 if(res.data.msg == "true"){
                     alert("Thêm thành công sinh viên :",this.state.ma_sinhvien);
@@ -70,7 +71,7 @@ class ThemSinhVien extends React.Component{
                 }
                 this.getAllStudent(evt);
             });
-    }
+    };
     deleteStudent = (evt,id,ma_sinhvien) => {
         evt.preventDefault();
         const config = {
@@ -80,7 +81,7 @@ class ThemSinhVien extends React.Component{
         };
         const body = JSON.stringify({id,ma_sinhvien});
         axios
-            .post(`http://localhost:3001/api/deleteStudent`,body,config)
+            .post(ip_Public+`/api/deleteStudent`,body,config)
             .then((res)=>{
                 if(res.data.msg == "true"){
                     alert("Xóa thành công sinh viên"+ ma_sinhvien);
@@ -90,7 +91,7 @@ class ThemSinhVien extends React.Component{
                 }
                 this.getAllStudent(evt);
             });
-    }
+    };
     updateStudent = (evt,id,ma_sinhvien,ten_sinhvien,ngay_sinh,avatar)=>{
         evt.preventDefault();
         const config = {
@@ -100,7 +101,7 @@ class ThemSinhVien extends React.Component{
         };
         const body = JSON.stringify({id,ma_sinhvien,ten_sinhvien,ngay_sinh,avatar});
         axios
-            .post(`http://localhost:3001/api/updateSinhVien`,body,config)
+            .post(ip_Public+`/api/updateSinhVien`,body,config)
             .then((res)=>{
                 if(res.data.msg == "true"){
                     alert("Cập nhật thành công sinh viên" +  ma_sinhvien);
@@ -117,8 +118,7 @@ class ThemSinhVien extends React.Component{
         this.setState({
             redirect : 1
         });
-        
-    }
+    };
     render(){
         const student = Array.from(this.state.student);
         const {ten_sinhvien,ngay_sinh,avatar} = this.state;
@@ -158,6 +158,7 @@ class ThemSinhVien extends React.Component{
         else if(this.state.redirect == 0){
             return(
                 <div>
+                    <div className="form_ThemSV">
                     <form>
                         <span>Mã sinh viên: </span>
                         <input 
@@ -177,8 +178,9 @@ class ThemSinhVien extends React.Component{
                             value = {this.state.ten_sinhvien}
                         />
                         <br/>
-                        <span>Ngày sinh: </span>
+                        <span >Ngày sinh: </span>
                         <input
+                            className="ngaysinh"
                             name="ngay_sinh"
                             placeholder="Nhập ngày sinh"
                             type="text"
@@ -195,11 +197,16 @@ class ThemSinhVien extends React.Component{
                             onChange = {this.onChange}
                             value = {this.state.avatar}
                         />
-                        <br/>
+                        <br/> <br/>
                         <button type="submit" onClick={(evt) => this.submitThemStudent(evt)}>Thêm Sinh Viên</button>
                     </form>
+                    </div>
+                    
                     <br/>
                     <br/>
+                    
+                        
+                    
                     <br/>
                     <table border = "1">
                         <thead>
@@ -222,13 +229,13 @@ class ThemSinhVien extends React.Component{
                                         <td>{student.avatar}</td>
                                         <td>
                                             <form>
-                                                <input type="submit" onClick={(evt)=>this.renderFormUpdateStudent(evt,student)}  value="Sửa"/>
+                                                <input className="btnEdit" type="submit" onClick={(evt)=>this.renderFormUpdateStudent(evt,student)}  value="Sửa"/>
                                             </form>
                                             
                                         </td>
                                         <td>
                                             <form>
-                                                <input type="submit" onClick={(evt)=>this.deleteStudent(evt,student.id,student.ma_sinhvien)} value="Xóa"/>
+                                                <input className="btnDelete" type="submit" onClick={(evt)=>this.deleteStudent(evt,student.id,student.ma_sinhvien)} value="Xóa"/>
                                             </form>
                                         </td>
                                     </tr>
@@ -237,7 +244,7 @@ class ThemSinhVien extends React.Component{
                         </tbody>
                     </table>
                 </div>
-            )};
-        }
+        )};    
+    }
 }
 export default ThemSinhVien;

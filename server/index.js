@@ -2,19 +2,12 @@ const express = require("express");
 const app = express();
 var cors = require('cors')
 const AWS = require("aws-sdk");
-const fs = require("fs");
 const bodyParser = require('body-parser');
 const docClient = new AWS.DynamoDB.DocumentClient({
-    region: "us-east-2",
-    accessKeyId: "",
-    secretAccessKey: ""
+    region: 'us-east-2',
+    accessKeyId: '',
+    secretAccessKey: ''
 });
-// AWS.config.update({
-//     region: "us-east-2",
-// });
-
-
-
 app.use(cors());
 app.use(bodyParser.json());
 app.listen(3001,(err)=>{
@@ -25,8 +18,6 @@ app.listen(3001,(err)=>{
         console.log("server running port: ",3001);
     }
 });
-
-
 app.post('/api/addSinhVien',(req,res)=>{
     const id =  req.body.id;
     const ma_sinhvien = req.body.ma_sinhvien;
