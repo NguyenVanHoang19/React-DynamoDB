@@ -17,7 +17,7 @@ class ThemSinhVien extends React.Component{
             ma_sinhvien: "",
             ten_sinhvien: "",
             ngay_sinh: "",
-            student: [{}],
+            student: [],
             avatar:"",
             redirect:0,  
         };
@@ -112,27 +112,6 @@ class ThemSinhVien extends React.Component{
                 
             });
     };
-    searchSinhVien = (evt) =>{
-        evt.preventDefault();
-        const config = {
-            headers :{
-                "Content-Type":"application/json",
-            },
-        };
-        const ten_sinhvien = this.state.ten_sinhvien;
-        const body = JSON.stringify({ten_sinhvien});
-        // console.log(ten_sinhvien);
-        axios.post(ip_Public+`/api/getStudentByTen`,body,config)
-        // .then((res)=>res.json())
-            .then((res)=>{
-                console.log("ket qua:"+res.data.msg);
-                const dulieu = res.data.msg;
-                console.log("json"+ JSON.stringify({dulieu}));
-                this.setState({
-                    student: dulieu,
-                })
-            });
-    };
     renderFormUpdateStudent =(evt,student)=>{
         evt.preventDefault();
         student_data = student;
@@ -141,7 +120,7 @@ class ThemSinhVien extends React.Component{
         });
     };
     render(){
-        // const student = Array.from(this.state.student);
+        const student = Array.from(this.state.student);
         const {ten_sinhvien,ngay_sinh,avatar} = this.state;
         if(this.state.redirect == 1){
             return(
@@ -180,59 +159,47 @@ class ThemSinhVien extends React.Component{
             return(
                 <div>
                     <div className="form_ThemSV">
-                        <form>
-                            <span>Mã sinh viên: </span>
-                            <input 
-                                name= "ma_sinhvien"
-                                placeholder="Nhập mã sinh viên"
-                                type="text"
-                                onChange={this.onChange}
-                                value = {this.state.ma_sinhvien}
-                            />
-                            <br/>
-                            <span>Tên sinh viên: </span>
-                            <input
-                                name="ten_sinhvien"
-                                placeholder="Nhập tên sinh viên"
-                                type="text"
-                                onChange = {this.onChange}
-                                value = {this.state.ten_sinhvien}
-                            />
-                            <br/>
-                            <span >Ngày sinh: </span>
-                            <input
-                                className="ngaysinh"
-                                name="ngay_sinh"
-                                placeholder="Nhập ngày sinh"
-                                type="text"
-                                onChange = {this.onChange}
-                                value = {this.state.ngay_sinh}
-                            />
-                            <br/>
-                            <br/>
-                            <span>Avatar: </span>
-                            <input
-                                name="avatar"
-                                placeholder="Chọn ảnh"
-                                type="file"
-                                onChange = {this.onChange}
-                                value = {this.state.avatar}
-                            />
-                            <br/> <br/>
-                            <button type="submit" onClick={(evt) => this.submitThemStudent(evt)}>Thêm Sinh Viên</button>
-                        </form>
-                        <br/><br/><br/>
-                        <form>
-                            <p>Tìm kiếm sinh viên theo tên</p>
-                            <span>Nhập tên sinh viên:</span>
-                            <input
-                                name ="ten_sinhvien"
-                                placeholder="Nhập tên sinh viên cần tìm kiếm"
-                                type= "text"
-                                onChange ={this.onChange}
-                            />
-                            <button type="submit" onClick={(evt)=> this.searchSinhVien(evt)}>Tìm kiếm</button>
-                        </form>
+                    <form>
+                        <span>Mã sinh viên: </span>
+                        <input 
+                            name= "ma_sinhvien"
+                            placeholder="Nhập mã sinh viên"
+                            type="text"
+                            onChange={this.onChange}
+                            value = {this.state.ma_sinhvien}
+                        />
+                        <br/>
+                        <span>Tên sinh viên: </span>
+                        <input
+                            name="ten_sinhvien"
+                            placeholder="Nhập tên sinh viên"
+                            type="text"
+                            onChange = {this.onChange}
+                            value = {this.state.ten_sinhvien}
+                        />
+                        <br/>
+                        <span >Ngày sinh: </span>
+                        <input
+                            className="ngaysinh"
+                            name="ngay_sinh"
+                            placeholder="Nhập ngày sinh"
+                            type="text"
+                            onChange = {this.onChange}
+                            value = {this.state.ngay_sinh}
+                        />
+                        <br/>
+                        <br/>
+                        <span>Avatar: </span>
+                        <input
+                            name="avatar"
+                            placeholder="Chọn ảnh"
+                            type="file"
+                            onChange = {this.onChange}
+                            value = {this.state.avatar}
+                        />
+                        <br/> <br/>
+                        <button type="submit" onClick={(evt) => this.submitThemStudent(evt)}>Thêm Sinh Viên</button>
+                    </form>
                     </div>
                     
                     <br/>
@@ -253,7 +220,7 @@ class ThemSinhVien extends React.Component{
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.student.map((student)=>{
+                            {student.map((student)=>{
                                  return(
                                     <tr>
                                         <td>{student.ma_sinhvien}</td>

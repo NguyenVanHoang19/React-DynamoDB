@@ -6,8 +6,9 @@ const bodyParser = require('body-parser');
 const docClient = new AWS.DynamoDB.DocumentClient({
     region: 'us-east-2',
     accessKeyId: '',
-    secretAccessKey: ''
+    secretAccessKey: '',
 });
+
 app.use(cors());
 app.use(bodyParser.json());
 app.listen(3001,(err)=>{
@@ -117,9 +118,31 @@ app.post('/api/deleteStudent',(req,res)=>{
         }
     });
 });
+// tim kiem student
+app.post('/api/getStudentByTen',(req,res)=>{
+    const ten_sinhvien = req.body.ten_sinhvien;
+    console.log(ten_sinhvien);
+    const params_getStudentByTen = {
+        TableName : "Student",
+        FilterExpression: "contains(ten_sinhvien,:ten_sv)",
+        ExpressionAttributeValues:{
+            ":ten_sv":ten_sinhvien,
+        }
+    };
+    docClient.scan(params_getStudentByTen,(onScan)= (err,data)=>{
+        if(err){
+            console.error("Unable to scan the table. Error JSON:", JSON.stringify(err, null, 2));
+        }
+        else{
+            console.log("Scan succeeded.");
+            return res.json({msg:data.Items});
+        }
+    });
+});
 
 
-////////////////////
+
+// ////////////////////
 // const dynamodb = new AWS.DynamoDB();
 
 // const params = {
